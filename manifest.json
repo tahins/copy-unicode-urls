@@ -3,18 +3,18 @@
 
   "name": "__MSG_extensionName__",
   "description": "__MSG_extensionDescription__",
-  "homepage_url": "https://github.com/ilyaigpetrov/copy-unicode-urls",
+  "homepage_url": "https://github.com/tahins/copy-unicode-urls",
   "default_locale": "en",
-  "version": "0.0.16",
+  "version": "0.0.1",
   "icons": {
     "128": "icons/u-red-128.png"
   },
-  "author": "ilyaigpetrov+copy-unicode-urls@gmail.com",
+  "author": "tahin.36+improved-url-copy@gmail.com",
 
   "permissions": [
-    "activeTab"
-    , "contextMenus"
-    , "storage"
+    "activeTab", 
+    "contextMenus", 
+    "storage"
   ],
 
   "background": {
@@ -35,10 +35,10 @@
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
-        "windows": "Alt+U",
-        "mac": "Alt+U",
-        "chromeos": "Alt+U",
-        "linux": "Alt+U"
+        "windows": "Ctrl+Alt+C",
+        "mac": "MacCtrl+Command+C",
+        "chromeos": "Ctrl+Alt+C",
+        "linux": "Ctrl+Alt+C"
       }
     }
   }

@@ -1,6 +1,8 @@
-# Copy Unicode URLs
+# Improved URL copy
 
-Packages for offline installation may be found at [releases page](https://github.com/ilyaigpetrov/copy-unicode-urls/releases):
+Based on [Copy Unicode URLs](https://github.com/ilyaigpetrov/copy-unicode-urls) by [ilyaigpetrov](https://github.com/ilyaigpetrov)
+
+Offline installation guide:
 
 1) Download a zip file.
 2) Unpack it to a folder.
@@ -11,4 +13,4 @@ If extension is installed this way (from file system, not from webstore) then it
 
 # Donations
 
-Please, [donate](https://github.com/ilyaigpetrov/copy-unicode-urls/wiki/Donate) to keep me motivated. Thank you! 
+Please, [donate](https://github.com/ilyaigpetrov/copy-unicode-urls/wiki/Donate) to the original author. Thank you! 

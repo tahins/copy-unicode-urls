@@ -12,14 +12,19 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
     await window.apis.storage.set({ ifToEncodeUrlTerminators: true });
   }
 
-  const copyToClipboard = (str) => {
+  if ((await window.apis.storage.get('ifToImprovedCopy')) === undefined) {
+    await window.apis.storage.set({ ifToImprovedCopy: false });
+  }
 
-    const area = document.createElement('textarea');
-    area.value = str;
-    document.body.appendChild(area);
-    area.select();
-    document.execCommand('copy');
-    document.body.removeChild(area);
+  const copyToClipboard = (str) => {
+    function listener(e) {
+      e.clipboardData.setData("text/html", str);
+      e.clipboardData.setData("text/plain", str);
+      e.preventDefault();
+    }
+    document.addEventListener("copy", listener);
+    document.execCommand("copy");
+    document.removeEventListener("copy", listener);
   };
 
   const localizeUrl = (url) => {
@@ -40,10 +45,10 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
       );
   };
 
-  const copyUrl = async (url) => {
-
+  const copyUrl = async (title, url) => {
     const ifToDecode = (await window.apis.storage.get('ifToDecode'));
     const ifToEncodeUrlTerminators = (await window.apis.storage.get('ifToEncodeUrlTerminators'));
+    const ifToImprovedCopy = (await window.apis.storage.get('ifToImprovedCopy'));
     if (ifToDecode) {
       url = localizeUrl(url);
     }
@@ -59,11 +64,15 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
       **/
       url = url.replace(/(?:[<>{}()[\]"`']|[.,;:!?-]$)/g, (matched, index, wholeString) => `%${matched.charCodeAt(0).toString(16).toUpperCase()}`);
     }
+    if (ifToImprovedCopy) {
+      url = `<a href="${url}">${title}</a>`
+    }
+
     copyToClipboard(url);
   };
 
   chrome.browserAction.onClicked.addListener(
-    ({ url }) => copyUrl(url),
+    ({ title, url }) => copyUrl(title, url),
   );
 
   const createMenuEntry = (id, type, title, handler, contexts, opts) => {
@@ -83,15 +92,14 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
     chrome.contextMenus.onClicked.addListener((info, tab) => {
 
       if (info.menuItemId === id) {
-        handler(info);
+        handler(info, tab);
       }
-      console.log(info, tab);
 
     });
 
   };
 
-  createMenuEntry('ifToDecode', 'checkbox', chrome.i18n.getMessage('ifToDecode'), (info) => {
+  createMenuEntry('ifToDecode', 'checkbox', chrome.i18n.getMessage('ifToDecode'), (info, tab) => {
 
       window.apis.storage.set({ ifToDecode: info.checked });
     },
@@ -101,7 +109,7 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
     },
   );
 
-  createMenuEntry('ifToEncodeUrlTerminators', 'checkbox', chrome.i18n.getMessage('ifToEncodeUrlTerminators'), (info) => {
+  createMenuEntry('ifToEncodeUrlTerminators', 'checkbox', chrome.i18n.getMessage('ifToEncodeUrlTerminators'), (info, tab) => {
 
       window.apis.storage.set({ ifToEncodeUrlTerminators: info.checked });
     },
@@ -111,7 +119,17 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
     },
   );
 
-  createMenuEntry('donate', 'normal', chrome.i18n.getMessage('donate'), (info) => {
+  createMenuEntry('ifToImprovedCopy', 'checkbox', chrome.i18n.getMessage('ifToImprovedCopy'), (info, tab) => {
+
+      window.apis.storage.set({ ifToImprovedCopy: info.checked });
+    },
+    ['browser_action'],
+    {
+      checked: (await window.apis.storage.get('ifToImprovedCopy')) === true,
+    },
+  );
+
+  createMenuEntry('donate', 'normal', chrome.i18n.getMessage('donate'), (info, tab) => {
       chrome.tabs.create({ url: 'https://ilyaigpetrov.page.link/copy-unicode-urls-donate' });
     },
     ['browser_action'],
@@ -120,7 +138,8 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
     },
   );
 
-  createMenuEntry('copyUrl', 'normal', chrome.i18n.getMessage('copyUnicodeUrl'), (info) => copyUrl(
+  createMenuEntry('copyUrl', 'normal', chrome.i18n.getMessage('copyUnicodeUrl'), (info, tab) => copyUrl(
+      tab.title,
       info.linkUrl ||
       info.srcUrl ||
       info.frameUrl ||
@@ -130,8 +149,8 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
     ['link', 'image', 'video', 'audio', 'frame', 'selection'],
   );
 
-  createMenuEntry('copyHighlightLink', 'normal', chrome.i18n.getMessage('copyUnicodeLinkToHighlight'), (info) => {
-    copyUrl(`${info.pageUrl.replace(/#.*/g, '')}#:~:text=${info.selectionText}`);
+  createMenuEntry('copyHighlightLink', 'normal', chrome.i18n.getMessage('copyUnicodeLinkToHighlight'), (info, tab) => {
+    copyUrl(tab.title, `${info.pageUrl.replace(/#.*/g, '')}#:~:text=${info.selectionText}`);
   },
   ['selection'],
 );

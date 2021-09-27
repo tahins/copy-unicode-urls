@@ -1,34 +1,34 @@
 {
   "extensionName": {
-    "message": "Copy Unicode URLs",
+    "message": "Improved URL copy",
     "description": "Name of the extension."
   },
   "extensionDescription": {
-    "message": "Copy Unicode URLs to clipboard without nasty percent-encodings or Punycode!",
+    "message": "Copy Unicode URLs to clipboard without nasty percent-encodings and get Edge like improved copy.",
     "description": "Description of the extension."
   },
   "ifToDecode": {
-    "message": "If to decode",
+    "message": "Decode URL",
     "description": ""
   },
   "ifToEncodeUrlTerminators": {
-    "message": "If to encode URL terminators",
+    "message": "Encode URL terminators (><\"`}{)])",
     "description": ""
   },
   "donate": {
-    "message": "Donate ❤",
+    "message": "Donate to the original author",
     "description": ""
   },
   "copyUnicodeUrl": {
-    "message": "Copy Unicode URL",
+    "message": "Copy improved URL",
     "description": ""
   },
   "iconHint": {
-    "message": "Click to copy unicode URL into the clipboard",
+    "message": "Click to copy improved URL into the clipboard",
     "description": ""
   },
   "copyUnicodeLinkToHighlight": {
-    "message": "Copy Unicode link to highlight",
+    "message": "Copy improved link to highlight",
     "description": ""
   }
 }

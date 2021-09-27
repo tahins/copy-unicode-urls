@@ -1,0 +1,34 @@
+{
+  "extensionName": {
+    "message": "উন্নত URL কপি",
+    "description": "Name of the extension."
+  },
+  "extensionDescription": {
+    "message": "সহজে ইউনিকোড URL কপি করুন ও এজ ব্রাউজারের মত উন্নত লিঙ্ক কপি করুন।",
+    "description": "Description of the extension."
+  },
+  "ifToDecode": {
+    "message": "ডিকোড URL",
+    "description": ""
+  },
+  "ifToEncodeUrlTerminators": {
+    "message": "URL টার্মিনেটর এনকোড করুন (><\"`}{)])",
+    "description": ""
+  },
+  "donate": {
+    "message": "মূল লেখককে সহায়তা করুন",
+    "description": ""
+  },
+  "copyUnicodeUrl": {
+    "message": "উন্নত URL কপি করুন",
+    "description": ""
+  },
+  "iconHint": {
+    "message": "উন্নত URL কপি করতে ক্লিক করুন",
+    "description": ""
+  },
+  "copyUnicodeLinkToHighlight": {
+    "message": "হাইলাইট অংশের লিঙ্ক কপি করুন",
+    "description": ""
+  }
+}
