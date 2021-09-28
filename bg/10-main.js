@@ -12,10 +12,6 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
     await window.apis.storage.set({ ifToEncodeUrlTerminators: true });
   }
 
-  if ((await window.apis.storage.get('ifToImprovedCopy')) === undefined) {
-    await window.apis.storage.set({ ifToImprovedCopy: false });
-  }
-
   const copyToClipboard = (str) => {
     function listener(e) {
       e.clipboardData.setData("text/html", str);
@@ -36,44 +32,58 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
       u = new URL(`http://${url}`);
     }
     return decodeURI(u.href
-        .replace(u.hostname, toUnicode(u.hostname)),
+      .replace(u.hostname, toUnicode(u.hostname)),
       )
       // Encode whitespace.
       .replace(
         /\s/g,
         (_, index, wholeString) => encodeURIComponent(wholeString.charAt(index)),
-      );
+        );
   };
 
-  const copyUrl = async (title, url) => {
-    const ifToDecode = (await window.apis.storage.get('ifToDecode'));
-    const ifToEncodeUrlTerminators = (await window.apis.storage.get('ifToEncodeUrlTerminators'));
-    const ifToImprovedCopy = (await window.apis.storage.get('ifToImprovedCopy'));
+const processUrl = async url => {
+    const ifToDecode = await window.apis.storage.get('ifToDecode');
+    const ifToEncodeUrlTerminators = await window.apis.storage.get('ifToEncodeUrlTerminators');
+
     if (ifToDecode) {
       url = localizeUrl(url);
     }
     if (ifToEncodeUrlTerminators) {
       /*
-        Issue #7.
-        Thunderbird sources:
-        https://searchfox.org/comm-central/source/mozilla/netwerk/streamconv/converters/mozTXTToHTMLConv.cpp#281 (mozTXTToHTMLConv::FindURLEnd)
-        These chars terminate the URL: ><"`}{)]`
-        These sequence doesn't terminate the URL: //[ (e.g. http://[1080::...)
-        These chars are not allowed at the end of the URL: .,;!?-:'
-        I apply slightly more strict rules below.
+      Issue #7.
+      Thunderbird sources:
+      https://searchfox.org/comm-central/source/mozilla/netwerk/streamconv/converters/mozTXTToHTMLConv.cpp#281 (mozTXTToHTMLConv::FindURLEnd)
+      These chars terminate the URL: ><"`}{)]`
+      These sequence doesn't terminate the URL: //[ (e.g. http://[1080::...)
+      These chars are not allowed at the end of the URL: .,;!?-:'
+      I apply slightly more strict rules below.
       **/
       url = url.replace(/(?:[<>{}()[\]"`']|[.,;:!?-]$)/g, (matched, index, wholeString) => `%${matched.charCodeAt(0).toString(16).toUpperCase()}`);
     }
-    if (ifToImprovedCopy) {
-      url = `<a href="${url}">${title}</a>`
-    }
 
-    copyToClipboard(url);
+    return url
+  }
+
+  const copyUrl = async url => {
+    let processedUrl = await processUrl(url);
+    copyToClipboard(processedUrl);
   };
 
-  chrome.browserAction.onClicked.addListener(
-    ({ title, url }) => copyUrl(title, url),
-  );
+  const copyUrlWithTitle = async (title, url) => {
+    let processedUrl = await processUrl(url);
+    let content = `${title}\n\n${processedUrl}`;
+    copyToClipboard(content);
+  };
+
+  const copyUrlAsLinkedText = async (title, url) => {
+    let processedUrl = await processUrl(url);
+    let content = `<a href="${processedUrl}">${title}</a>`;
+    copyToClipboard(content);
+  };
+
+  window.copyUrl = copyUrl;
+  window.copyUrlWithTitle = copyUrlWithTitle;
+  window.copyUrlAsLinkedText = copyUrlAsLinkedText;
 
   const createMenuEntry = (id, type, title, handler, contexts, opts) => {
 
@@ -101,50 +111,39 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
 
   createMenuEntry('ifToDecode', 'checkbox', chrome.i18n.getMessage('ifToDecode'), (info, tab) => {
 
-      window.apis.storage.set({ ifToDecode: info.checked });
-    },
-    ['browser_action'],
-    {
-      checked: (await window.apis.storage.get('ifToDecode')) === true,
-    },
+    window.apis.storage.set({ ifToDecode: info.checked });
+  },
+  ['browser_action'],
+  {
+    checked: (await window.apis.storage.get('ifToDecode')) === true,
+  },
   );
 
   createMenuEntry('ifToEncodeUrlTerminators', 'checkbox', chrome.i18n.getMessage('ifToEncodeUrlTerminators'), (info, tab) => {
 
-      window.apis.storage.set({ ifToEncodeUrlTerminators: info.checked });
-    },
-    ['browser_action'],
-    {
-      checked: (await window.apis.storage.get('ifToEncodeUrlTerminators')) === true,
-    },
-  );
-
-  createMenuEntry('ifToImprovedCopy', 'checkbox', chrome.i18n.getMessage('ifToImprovedCopy'), (info, tab) => {
-
-      window.apis.storage.set({ ifToImprovedCopy: info.checked });
-    },
-    ['browser_action'],
-    {
-      checked: (await window.apis.storage.get('ifToImprovedCopy')) === true,
-    },
+    window.apis.storage.set({ ifToEncodeUrlTerminators: info.checked });
+  },
+  ['browser_action'],
+  {
+    checked: (await window.apis.storage.get('ifToEncodeUrlTerminators')) === true,
+  },
   );
 
   createMenuEntry('donate', 'normal', chrome.i18n.getMessage('donate'), (info, tab) => {
-      chrome.tabs.create({ url: 'https://ilyaigpetrov.page.link/copy-unicode-urls-donate' });
-    },
-    ['browser_action'],
-    {
-      checked: (await window.apis.storage.get('ifToEncodeUrlTerminators')) === true,
-    },
+    chrome.tabs.create({ url: 'https://ilyaigpetrov.page.link/copy-unicode-urls-donate' });
+  },
+  ['browser_action'],
+  {
+    checked: (await window.apis.storage.get('ifToEncodeUrlTerminators')) === true,
+  },
   );
-
   createMenuEntry('copyUrl', 'normal', chrome.i18n.getMessage('copyUnicodeUrl'), (info, tab) => copyUrl(
-      tab.title,
-      info.linkUrl ||
-      info.srcUrl ||
-      info.frameUrl ||
-      info.selectionText ||
-      info.pageUrl // Needed?
+    tab.title,
+    info.linkUrl ||
+    info.srcUrl ||
+    info.frameUrl ||
+    info.selectionText ||
+    info.pageUrl // Needed?
     ),
     ['link', 'image', 'video', 'audio', 'frame', 'selection'],
   );
@@ -153,6 +152,6 @@ import { toUnicode } from '../node_modules/punycode/punycode.es6.js';
     copyUrl(tab.title, `${info.pageUrl.replace(/#.*/g, '')}#:~:text=${info.selectionText}`);
   },
   ['selection'],
-);
+  );
 
 })();

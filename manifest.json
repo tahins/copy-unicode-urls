@@ -30,15 +30,16 @@
 
   "browser_action": {
     "default_title": "__MSG_iconHint__",
-    "default_icon": "./icons/u-red-128.png"
+    "default_icon": "./icons/u-red-128.png",
+    "default_popup": "./pages/popup/index.html"
   },
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
-        "windows": "Ctrl+Alt+C",
-        "mac": "MacCtrl+Command+C",
-        "chromeos": "Ctrl+Alt+C",
-        "linux": "Ctrl+Alt+C"
+        "windows": "Alt+Shift+C",
+        "mac": "Command+Shift+C",
+        "chromeos": "Alt+Shift+C",
+        "linux": "Alt+Shift+C"
       }
     }
   }

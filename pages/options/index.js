@@ -4,8 +4,7 @@ chrome.runtime.getBackgroundPage((bgWindow) => {
 
   chrome.storage.local.get(null, (storage) => {
     ifToDecode.checked = storage.ifToDecode;
-    ifToEncodeUrlTerminators.checked = storage.ifToEncodeUrlTerminators;    
-    ifToImprovedCopy.checked = storage.ifToImprovedCopy;
+    ifToEncodeUrlTerminators.checked = storage.ifToEncodeUrlTerminators;
   });
   ifToDecode.onclick = ({ target }) => {
     chrome.storage.local.set({ ifToDecode: target.checked });
@@ -14,10 +13,6 @@ chrome.runtime.getBackgroundPage((bgWindow) => {
   ifToEncodeUrlTerminators.onclick = ({ target }) => {
     chrome.storage.local.set({ ifToEncodeUrlTerminators: target.checked });
     chrome.contextMenus.update('ifToEncodeUrlTerminators', { checked: target.checked });
-  };
-  ifToImprovedCopy.onclick = ({ target }) => {
-    chrome.storage.local.set({ ifToImprovedCopy: target.checked });
-    chrome.contextMenus.update('ifToImprovedCopy', { checked: target.checked });
   };
 
 });

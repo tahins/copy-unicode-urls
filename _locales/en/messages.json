@@ -20,7 +20,15 @@
     "description": ""
   },
   "copyUnicodeUrl": {
-    "message": "Copy improved URL",
+    "message": "Copy URL",
+    "description": ""
+  },
+  "copyUrlWithTitle": {
+    "message": "Copy URL with title",
+    "description": ""
+  },
+  "copyUrlAsLinkedText": {
+    "message": "Copy as linked title",
     "description": ""
   },
   "iconHint": {
@@ -28,7 +36,7 @@
     "description": ""
   },
   "copyUnicodeLinkToHighlight": {
-    "message": "Copy improved link to highlight",
+    "message": "Copy link to highlight",
     "description": ""
   }
 }
