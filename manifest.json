@@ -33,14 +33,23 @@
     "default_icon": "./icons/u-red-128.png",
     "default_popup": "./pages/popup/index.html"
   },
+
   "commands": {
-    "_execute_browser_action": {
-      "suggested_key": {
-        "windows": "Alt+Shift+C",
-        "mac": "Command+Shift+C",
-        "chromeos": "Alt+Shift+C",
-        "linux": "Alt+Shift+C"
-      }
+    "copy-url": {
+      "description": "Copy URL.",
+      "suggested_key": "Alt+Shift+U"
+    },
+    "copy-url-with-title": {
+      "description": "Copy URL with title.",
+      "suggested_key": "Alt+Shift+T"
+    },
+    "copy-url-linked-title": {
+      "description": "Copy URL as linked title.",
+      "suggested_key": "Alt+Shift+L"
+    },
+    "copy-url-markdown-text": {
+      "description": "Copy URL as markdown text.",
+      "suggested_key": "Alt+Shift+M"
     }
   }
 }

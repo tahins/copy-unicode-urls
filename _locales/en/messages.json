@@ -31,6 +31,10 @@
     "message": "Copy as linked title",
     "description": ""
   },
+  "copyUrlAsMarkdownText": {
+    "message": "Copy as markdown text",
+    "description": ""
+  },
   "iconHint": {
     "message": "Click to copy improved URL into the clipboard",
     "description": ""

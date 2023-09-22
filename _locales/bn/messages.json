@@ -23,6 +23,18 @@
     "message": "URL কপি করুন",
     "description": ""
   },
+  "copyUrlWithTitle": {
+    "message": "শিরোনাম সহ URL কপি করুন",
+    "description": ""
+  },
+  "copyUrlAsLinkedText": {
+    "message": "লিঙ্কযুক্ত শিরোনাম হিসেবে URL কপি করুন",
+    "description": ""
+  },
+  "copyUrlAsMarkdownText": {
+    "message": "মার্কডাউন টেক্সট হিসেবে URL কপি করুন",
+    "description": ""
+  },
   "iconHint": {
     "message": "উন্নত URL কপি করতে ক্লিক করুন",
     "description": ""

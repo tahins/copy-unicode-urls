@@ -16,6 +16,10 @@ chrome.runtime.getBackgroundPage((bgWindow) => {
             bgWindow.copyUrlAsLinkedText(title, url);
             window.close();
         };
+        copyUrlAsMarkdownText.onclick = (_) => {
+            bgWindow.copyUrlAsMarkdownText(title, url);
+            window.close();
+        };
     });
 });
 

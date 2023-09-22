@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
 	<title></title>
@@ -9,7 +9,7 @@ body {
   font-size: 14px;
   letter-spacing: 0.3px;
   margin: 0;
-  width: 180px;
+  width: 330px;
 }
 ul {
   list-style: none;
@@ -18,20 +18,33 @@ ul {
 }
 li {
   cursor: pointer;
-  padding: 10px 15px;
+  padding: 15px;
 }
 li:hover {
   background: whitesmoke;
 }
 	</style>
 </head>
-<body>
-	<ul>
-		<li id="copyUrl" data-localize="__MSG_copyUnicodeUrl__">Copy URL</li>
-		<li id="copyUrlWithTitle" data-localize="__MSG_copyUrlWithTitle__">Copy URL with title</li>
-		<li id="copyUrlAsLinkedText" data-localize="__MSG_copyUrlAsLinkedText__">Copy as linked title</li>
-	</ul>
+  <body>
+  	<ul>
+  		<li id="copyUrl">
+        <strong data-localize="__MSG_copyUnicodeUrl__"></strong>
+        <small>[Alt/Option + Shift + U]</small>
+      </li>
+  		<li id="copyUrlWithTitle">
+        <strong data-localize="__MSG_copyUrlWithTitle__"></strong>
+        <small>[Alt/Option + Shift + T]</small>
+      </li>
+  		<li id="copyUrlAsLinkedText">
+        <strong data-localize="__MSG_copyUrlAsLinkedText__"></strong>
+        <small>[Alt/Option + Shift + L]</small>
+      </li>
+  		<li id="copyUrlAsMarkdownText">
+        <strong data-localize="__MSG_copyUrlAsMarkdownText__"></strong>
+        <small>[Alt/Option + Shift + M]</small>
+      </li>
+  	</ul>
 
-	<script src="./index.js"></script>
-</body>
+  	<script src="./index.js"></script>
+  </body>
 </html>

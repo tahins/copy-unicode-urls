@@ -81,9 +81,28 @@ const processUrl = async url => {
     copyToClipboard(content);
   };
 
-  window.copyUrl = copyUrl;
-  window.copyUrlWithTitle = copyUrlWithTitle;
-  window.copyUrlAsLinkedText = copyUrlAsLinkedText;
+  const copyUrlAsMarkdownText = async (title, url) => {
+    let processedUrl = await processUrl(url);
+    let content = `[${title}](${processedUrl})`;
+    copyToClipboard(content);
+  };
+
+  window.copyUrl               = copyUrl;
+  window.copyUrlWithTitle      = copyUrlWithTitle;
+  window.copyUrlAsLinkedText   = copyUrlAsLinkedText;
+  window.copyUrlAsMarkdownText = copyUrlAsMarkdownText;
+
+  // Add keyboard shortcut for different copy actions
+  chrome.commands.onCommand.addListener(function(command) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+      const { title, url } = tabs[0];
+
+      if      (command === "copy-url")               copyUrl               (url);
+      else if (command === "copy-url-with-title")    copyUrlWithTitle      (title, url);
+      else if (command === "copy-url-linked-title")  copyUrlAsLinkedText   (title, url);
+      else if (command === "copy-url-markdown-text") copyUrlAsMarkdownText (title, url);
+    });
+  });
 
   const createMenuEntry = (id, type, title, handler, contexts, opts) => {
 
