@@ -1,6 +1,6 @@
 {
   "name": "copy-unicode-urls",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Copy unicode strings from address bar without nasty percent-encodings or punycode!",
   "main": "background.js",
   "scripts": {
